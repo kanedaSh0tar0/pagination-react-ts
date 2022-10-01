@@ -1,21 +1,11 @@
 import { FC, useEffect, useState } from "react"
 
+import PaginationProps from "../../types/PaginationProps";
+
 import ActionsButton from "../ActionsButton/ActionsButton";
 import PaginationItem from "../PaginationItem/PaginationItem";
 
 import styles from './PaginationPanel.module.scss'
-
-interface PaginationProps {
-    activePage: number;
-    totalItems: number;
-    perPage: number;
-    withActions?: boolean;
-    classes?: {
-        btn?: string;
-        activeBtn?: string;
-    }
-    onChangePage: (newPage: number) => void;
-}
 
 const PaginationPanel: FC<PaginationProps> = ({
     activePage,
@@ -41,6 +31,7 @@ const PaginationPanel: FC<PaginationProps> = ({
         <div className={styles.container}>
             {withActions && <ActionsButton
                 onChangePage={() => onChangePage(activePage > 1 ? activePage - 1 : activePage)}
+                disabled={activePage === 1}
             >
                 Prev
             </ActionsButton>
@@ -57,6 +48,7 @@ const PaginationPanel: FC<PaginationProps> = ({
 
             {withActions && <ActionsButton
                 onChangePage={() => onChangePage(activePage < paginationItems.length ? activePage + 1 : activePage)}
+                disabled={activePage === paginationItems.length}
             >
                 Next
             </ActionsButton>

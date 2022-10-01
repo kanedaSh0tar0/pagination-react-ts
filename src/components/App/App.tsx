@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 
+import PaginationProps from '../../types/PaginationProps';
+
 import Post from '../../types/Post';
 
 import ControlForm from '../ControlForm/ControlForm';
@@ -8,9 +10,11 @@ import Posts from '../Posts/Posts';
 
 import styles from './App.module.scss'
 
+type PaginationState = Omit<PaginationProps, 'classes' | 'onChangePage'>
+
 function App() {
   const [posts, setPosts] = useState<Post[]>([])
-  const [pagination, setPagination] = useState({
+  const [pagination, setPagination] = useState<PaginationState>({
     activePage: 2,
     totalItems: 56,
     perPage: 10,
@@ -50,7 +54,7 @@ function App() {
         handleChangePerPage={handleChangePerPage}
         handleChangeActions={handleChangeActions}
         perPage={pagination.perPage}
-        actions={pagination.withActions}
+        actions={pagination.withActions || false}
       />
       <PaginationPanel
         activePage={pagination.activePage}

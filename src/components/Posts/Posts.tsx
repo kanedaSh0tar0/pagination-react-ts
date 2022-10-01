@@ -13,15 +13,15 @@ interface PostsProps {
 const Posts: FC<PostsProps> = ({ posts }) => {
     return (
         <div className={styles.container}>
-            {posts.map(post => {
-                return <PostItem
+            {posts.map(post =>
+                <PostItem
                     key={post.id}
                     userId={post.userId}
                     title={post.title}
                     body={post.body}
                     id={post.id}
                 />
-            })}
+            )}
         </div>
     )
 }
