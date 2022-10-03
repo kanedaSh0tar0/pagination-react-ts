@@ -1,62 +1,41 @@
-import { FC, useEffect, useState } from "react"
+import { FC } from "react"
+import { Pagination, Checkbox } from 'antd'
 
 import PaginationProps from "../../types/PaginationProps";
 
-import ActionsButton from "../ActionsButton/ActionsButton";
-import PaginationItem from "../PaginationItem/PaginationItem";
-
 import styles from './PaginationPanel.module.scss'
 
-const PaginationPanel: FC<PaginationProps> = ({
+interface PaginationPropsWithHandleChangers extends PaginationProps {
+    handleChangePerPage: (perPage: number) => void
+    handleChangeActions: () => void
+}
+
+const PaginationPanel: FC<PaginationPropsWithHandleChangers> = ({
     activePage,
     totalItems,
     perPage,
     onChangePage,
     withActions,
-    classes
+    classes,
+    handleChangePerPage,
+    handleChangeActions
 }) => {
-    const [paginationItems, setPaginationItems] = useState<number[]>([])
-
-    useEffect(() => {
-        let itemsArr = []
-
-        for (let i = 1; i < Math.ceil(totalItems / perPage) + 1; i++) {
-            itemsArr.push(i)
-        }
-
-        setPaginationItems(itemsArr)
-    }, [perPage, totalItems])
 
     return (
         <div className={styles.container}>
-            {withActions && <ActionsButton
-                onChangePage={() => onChangePage(activePage > 1 ? activePage - 1 : activePage)}
-                disabled={activePage === 1}
-            >
-                Prev
-            </ActionsButton>
-            }
+            <Checkbox className={styles.btnsCheckbox} name='actions' checked={withActions} onChange={handleChangeActions}>Pagination with actions buttons?</Checkbox>
 
-            {paginationItems.map(item => {
-                return <PaginationItem
-                    key={item}
-                    num={item}
-                    classes={item === activePage ? classes?.activeBtn : ''}
-                    onChangePage={() => onChangePage(item)}
-                />
-            })}
-
-            {withActions && <ActionsButton
-                onChangePage={() => onChangePage(activePage < paginationItems.length ? activePage + 1 : activePage)}
-                disabled={activePage === paginationItems.length}
-            >
-                Next
-            </ActionsButton>
-            }
+            <Pagination
+                className={!withActions ? classes?.activeBtn : ''}
+                current={activePage}
+                total={totalItems}
+                showTotal={total => `${total} posts`}
+                pageSize={perPage}
+                onShowSizeChange={(_, size) => handleChangePerPage(size)}
+                onChange={(page) => onChangePage(page)}
+            />
         </div>
     )
 }
-
-
 
 export default PaginationPanel

@@ -1,77 +1,51 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { BrowserRouter, Switch, Route } from 'react-router-dom'
 
-import PaginationProps from '../../types/PaginationProps';
+import { Layout, Button } from 'antd'
 
-import Post from '../../types/Post';
-
-import ControlForm from '../ControlForm/ControlForm';
-import PaginationPanel from '../PaginationPanel/PaginationPanel';
-import Posts from '../Posts/Posts';
+import PostPage from '../../pages/PostPage/PostPage'
+import TaskFirst from '../../pages/TaskFirst/TaskFirst'
+import Home from '../../pages/Home/Home'
+import Options from '../../pages/Options/Options'
+import PrivateRoute from '../PrivatRoute/PrivateRoute'
+import Sidebar from '../Sidebar/Sidebar'
 
 import styles from './App.module.scss'
+import 'antd/dist/antd.css'
 
-type PaginationState = Omit<PaginationProps, 'classes' | 'onChangePage'>
+const { Header, Footer, Content } = Layout
 
 function App() {
-  const [posts, setPosts] = useState<Post[]>([])
-  const [pagination, setPagination] = useState<PaginationState>({
-    activePage: 2,
-    totalItems: 56,
-    perPage: 10,
-    withActions: false
-  })
+  const [isAuth, setIsAuth] = useState<boolean>(JSON.parse(localStorage.getItem('isAuth') || 'false'))
 
-  async function fetchPosts() {
-    try {
-      const response = await fetch(`https://jsonplaceholder.typicode.com/posts?_limit=${pagination.totalItems}`)
-      const posts = await response.json()
-
-      setPosts(posts)
-    } catch (err) {
-      alert(err)
-    }
-  }
-
-  useEffect(() => {
-    fetchPosts()
-  }, [])
-
-  const handleChangePage = (newPage: number): void => {
-    setPagination(prev => { return { ...prev, activePage: newPage } })
-  }
-
-  const handleChangePerPage = (perPage: number): void => {
-    setPagination(prev => { return { ...prev, perPage, activePage: 1 } })
-  }
-
-  const handleChangeActions = () => {
-    setPagination(prev => { return { ...prev, withActions: !prev.withActions } })
+  const auth = () => {
+    localStorage.setItem('isAuth', JSON.stringify(!isAuth))
+    setIsAuth(prev => !prev)
   }
 
   return (
-    <div className={styles.App}>
-      <ControlForm
-        handleChangePerPage={handleChangePerPage}
-        handleChangeActions={handleChangeActions}
-        perPage={pagination.perPage}
-        actions={pagination.withActions || false}
-      />
-      <PaginationPanel
-        activePage={pagination.activePage}
-        totalItems={pagination.totalItems}
-        perPage={pagination.perPage}
-        onChangePage={handleChangePage}
-        withActions={pagination.withActions}
-        classes={{ activeBtn: styles.activeBtn }}
-      />
-      <span className={styles.totalPosts}>{pagination.totalItems} posts</span>
-      {!posts.length
-        ?
-        <h1>Loading...</h1>
-        :
-        <Posts posts={posts.slice(pagination.perPage * (pagination.activePage - 1), pagination.activePage * pagination.perPage)} />
-      }
-    </div>
+    <BrowserRouter>
+      <Layout className={styles.mainLayout}>
+        <Sidebar isAuth={isAuth} />
+        <Layout>
+          <Header className={styles.header}>
+            <Button onClick={auth}>{!isAuth ? 'Login' : 'Logout'}</Button>
+          </Header>
+          <Layout className={styles.contentLayout}>
+            <Content className={styles.content}>
+              <Switch>
+                <Route exact path='/' component={Home} />
+                <Route path='/task1' component={TaskFirst} />
+                <Route path='/task2' component={PostPage} />
+                <PrivateRoute path='/options' component={Options} />
+              </Switch>
+            </Content>
+          </Layout>
+          <Footer className={styles.footer}>Incora Coding Camp homework ©2022 created by Antonov Nikita</Footer>
+        </Layout>
+      </Layout>
+
+    </BrowserRouter>
   );
 }
 

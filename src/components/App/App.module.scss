@@ -1,15 +1,20 @@
-.App {
-    max-width: 1054px;
-    padding: 10px 15px;
-    margin: 0 auto;
-}
+.mainLayout {
+    min-height: 100vh !important;
 
-.totalPosts {
-    font-size: 24px;
-}
+    .header {
+        background-color: #fff;
+    }
 
-// These styles are here only for practice, I understand that their presence here has no logic
-.activeBtn {
-    border: 2px solid red;
-    color: red;
+    .contentLayout {
+        padding: 20px 15px;
+
+        .content {
+            background-color: #fff;
+            padding: 10px 15px;
+        }
+    }
+
+    .footer {
+        text-align: center;
+    }
 }
