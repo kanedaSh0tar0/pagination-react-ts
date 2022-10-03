@@ -9,6 +9,7 @@ import Home from '../../pages/Home/Home'
 import Options from '../../pages/Options/Options'
 import PrivateRoute from '../PrivatRoute/PrivateRoute'
 import Sidebar from '../Sidebar/Sidebar'
+import NotFound from '../../pages/NotFound/NotFound'
 
 import styles from './App.module.scss'
 import 'antd/dist/antd.css'
@@ -38,6 +39,7 @@ function App() {
                 <Route path='/task1' component={TaskFirst} />
                 <Route path='/task2' component={PostPage} />
                 <PrivateRoute path='/options' component={Options} />
+                <Route path='*' component={NotFound} />
               </Switch>
             </Content>
           </Layout>
