@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Menu, Layout, MenuProps } from 'antd'
 import { HomeOutlined, SettingOutlined, UnorderedListOutlined } from '@ant-design/icons'
@@ -12,6 +12,7 @@ interface SidebarProps {
 }
 
 const Sidebar: FC<SidebarProps> = ({ isAuth }) => {
+    const [collapsed, setCollapsed] = useState(false);
     const location = useLocation()
     const headerItems: MenuProps['items'] = [
         {
@@ -51,7 +52,12 @@ const Sidebar: FC<SidebarProps> = ({ isAuth }) => {
     ]
 
     return (
-        <Sider theme="dark">
+        <Sider
+            collapsible
+            collapsed={collapsed}
+            onCollapse={value => setCollapsed(value)}
+            theme="dark"
+        >
             <div className={styles.logo}>LOGO</div>
             <Menu
                 theme="dark"
