@@ -1,3 +1,4 @@
+import cn from 'classnames'
 import { useState } from 'react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 
@@ -18,6 +19,7 @@ const { Header, Footer, Content } = Layout
 
 function App() {
   const [isAuth, setIsAuth] = useState<boolean>(JSON.parse(localStorage.getItem('isAuth') || 'false'))
+  const [collapsed, setCollapsed] = useState(true)
 
   const auth = () => {
     localStorage.setItem('isAuth', JSON.stringify(!isAuth))
@@ -27,13 +29,18 @@ function App() {
   return (
     <BrowserRouter>
       <Layout className={styles.mainLayout}>
-        <Sidebar isAuth={isAuth} />
-        <Layout>
+        <Sidebar
+          collapsed={collapsed}
+          setCollapsed={() => setCollapsed(prev => !prev)}
+          classes={styles.sidebar}
+          isAuth={isAuth}
+        />
+        <Layout className={cn(styles.contentLayout, collapsed && styles.collapsed)}>
           <Header className={styles.header}>
             <Button onClick={auth}>{!isAuth ? 'Login' : 'Logout'}</Button>
           </Header>
-          <Layout className={styles.contentLayout}>
-            <Content className={styles.content}>
+          <Layout className={styles.pageLayout}>
+            <Content className={styles.pageContent}>
               <Switch>
                 <Route exact path='/' component={Home} />
                 <Route path='/task1' component={TaskFirst} />

@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Menu, Layout, MenuProps } from 'antd'
 import { HomeOutlined, SettingOutlined, UnorderedListOutlined } from '@ant-design/icons'
@@ -9,10 +9,12 @@ const { Sider } = Layout
 
 interface SidebarProps {
     isAuth: boolean
+    classes: string
+    collapsed: boolean
+    setCollapsed: () => void
 }
 
-const Sidebar: FC<SidebarProps> = ({ isAuth }) => {
-    const [collapsed, setCollapsed] = useState(false);
+const Sidebar: FC<SidebarProps> = ({ isAuth, classes, collapsed, setCollapsed }) => {
     const location = useLocation()
     const headerItems: MenuProps['items'] = [
         {
@@ -53,9 +55,10 @@ const Sidebar: FC<SidebarProps> = ({ isAuth }) => {
 
     return (
         <Sider
+            className={classes}
             collapsible
             collapsed={collapsed}
-            onCollapse={value => setCollapsed(value)}
+            onCollapse={setCollapsed}
             theme="dark"
         >
             <div className={styles.logo}>LOGO</div>
