@@ -7,6 +7,7 @@ import Post from '../../types/Post'
 import PaginationPanel from '../../components/PaginationPanel/PaginationPanel'
 
 import styles from './PostPage.module.scss'
+import usePagination from '../../hooks/usePagination'
 
 type PaginationState = Omit<PaginationProps, 'classes' | 'onChangePage'>
 
@@ -18,6 +19,7 @@ const PostPage: FC = () => {
         withActions: false
     })
     const [posts, setPosts] = useState<Post[]>([])
+    const { currentPage, handleChangePage } = usePagination(pagination.activePage)
 
     useEffect(() => {
         (async () => {
@@ -32,9 +34,9 @@ const PostPage: FC = () => {
         })()
     }, [])
 
-    const handleChangePage = (newPage: number): void => {
-        setPagination(prev => { return { ...prev, activePage: newPage } })
-    }
+    // const handleChangePage = (newPage: number): void => {
+    //     setPagination(prev => { return { ...prev, activePage: newPage } })
+    // }
 
     const handleChangePerPage = (perPage: number): void => {
         setPagination(prev => { return { ...prev, perPage } })
@@ -50,7 +52,8 @@ const PostPage: FC = () => {
             <PaginationPanel
                 handleChangePerPage={handleChangePerPage}
                 handleChangeActions={handleChangeActions}
-                activePage={pagination.activePage}
+                // activePage={pagination.activePage}
+                activePage={currentPage}
                 totalItems={pagination.totalItems}
                 perPage={pagination.perPage}
                 onChangePage={handleChangePage}
@@ -67,7 +70,8 @@ const PostPage: FC = () => {
                     <List
                         className={styles.list}
                         bordered
-                        dataSource={posts.slice(pagination.perPage * (pagination.activePage - 1), pagination.activePage * pagination.perPage)}
+                        // dataSource={posts.slice(pagination.perPage * (pagination.activePage - 1), pagination.activePage * pagination.perPage)}
+                        dataSource={posts.slice(pagination.perPage * (currentPage - 1), currentPage * pagination.perPage)}
                         renderItem={item => (
                             <List.Item className={styles.listItem}>
                                 <h2 className={styles.itemId}>{item.id}</h2>

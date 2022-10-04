@@ -19,7 +19,7 @@ const { Header, Footer, Content } = Layout
 
 function App() {
   const [isAuth, setIsAuth] = useState<boolean>(JSON.parse(localStorage.getItem('isAuth') || 'false'))
-  const [collapsed, setCollapsed] = useState(true)
+  const [collapsed, setCollapsed] = useState<boolean>(true)
 
   const auth = () => {
     localStorage.setItem('isAuth', JSON.stringify(!isAuth))
