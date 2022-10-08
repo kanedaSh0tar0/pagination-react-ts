@@ -1,0 +1,41 @@
+.mainLayout {
+    min-height: 100vh !important;
+
+    .sidebar {
+        overflow: auto;
+        height: 100vh;
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+    }
+
+    .contentLayout.collapsed {
+        margin-left: 80px;
+    }
+
+    .contentLayout {
+        margin-left: 200px;
+        transition: 0.2s linear;
+
+        .header {
+            background-color: transparent;
+            display: flex;
+            align-items: center;
+            flex-direction: row-reverse;
+        }
+
+        .pageLayout {
+            padding: 10px 15px;
+
+            .pageContent {
+                background-color: #fff;
+                padding: 10px 15px;
+            }
+        }
+
+        .footer {
+            text-align: center;
+        }
+    }
+}
